@@ -1,0 +1,35 @@
+from random import randint
+
+while True:
+    itens = ("Pedra", "Papel", "Tesoura") 
+    computador = randint(0,2) # Escolhe uma jogada aleatória para o computador (0 para Pedra, 1 para Papel, 2 para Tesoura)
+
+    print("\n[0]: Pedra\n[1]: Papel\n[2]: Tesoura")
+    jogador = int(input("Selecione sua jogada: ")) # Solicita ao jogador para selecionar uma jogada
+
+    try:
+        jogador = int(jogador) # Converte a entrada do jogador em um número inteiro
+
+        if jogador in range (3): # Verifica se a escolha do jogador está dentro do intervalo válido (0 a 2)
+            print(f"Você escolheu: {itens[jogador]}")
+            print(f"O computador escolheu: {itens[computador]}")
+
+            print("\n")
+
+            resultados = [
+                ["Empate.", "Você venceu!", "Você perdeu!", "Inválido."],  # Para quando o computador escolhe Pedra
+                ["Você perdeu!", "Empate.", "Você venceu!", "Inválido."],  # Para quando o computador escolhe Papel
+                ["Você venceu!", "Você perdeu!", "Empate.", "Inválido."]  # Para quando o computador escolhe Tesoura
+            ]
+
+            print(resultados[computador][jogador]) # Imprime o resultado do jogo
+
+        else:
+            print("Entrada inválida. Por favor, insira um número entre 0 e 2.")
+
+    except ValueError:
+        print("Entrada inválida. Por favor, insira um número.") # Captura o erro caso a entrada do jogador não seja um número
+        
+    continuar = input("Deseja jogar novamente? (S/N): ") # Pergunta ao jogador se ele deseja jogar novamente
+    if continuar.lower() != "s":
+        break # Encerra o loop se o usuário não quiser continuar jogando
