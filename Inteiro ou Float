@@ -1,0 +1,30 @@
+def intOuFloat(numero):
+    if "," in numero or "." in numero: # Se "," ou "." estiverem presentes na entrada, assume-se que o número é um decimal
+        if numero.count(".") == 1 and numero[-1] not in [".", ","]:
+            try:
+                numero_float = float(numero.replace(",", "."))  # Substitui "," por "." e converte para float
+                if numero_float.is_integer():
+                    return "inteiro."
+                else:
+                    return "decimal."
+            except ValueError:
+                return "não é número."
+        else:
+            return "não é número."
+    else:
+        try:
+            numero = int(numero)
+            return "inteiro."
+        except ValueError:
+            return "não é número."
+
+while True:
+    numero = input("Digite o número: ")
+    
+    if numero.lower() == "break":
+        print("Programa interrompido.")
+        break
+    
+    tipo = intOuFloat(numero)
+    numero_formatado = numero.replace(".", ",")
+    print(f"O número {numero_formatado} é {tipo}")
