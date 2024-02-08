@@ -1,9 +1,12 @@
 def intOuFloat(numero):
-    if "," in numero or "." in numero: # Se "," ou "." estiverem presentes na entrada, assume-se que o número é um decimal
+    # Substitui vírgulas por pontos
+    numero = numero.replace(",", ".")
+    
+    if "." in numero: # Se "." estiver presente na entrada, assume-se que o número é um decimal
         if numero.count(".") == 1 and numero[-1] not in [".", ","]:
             try:
-                numero_float = float(numero.replace(",", "."))  # Substitui "," por "." e converte para float
-                if numero_float.is_integer():
+                numero = float(numero)  # Converte para float
+                if numero.is_integer():
                     return "inteiro."
                 else:
                     return "decimal."
