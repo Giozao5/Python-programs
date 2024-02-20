@@ -1,6 +1,6 @@
 def converteParaDecimal(binario):
     try:
-        if len(binario) <= 8:
+        if len(binario) <= 8: # Define que o limite da string será de 8 caracteres
             decimal = int(binario, 2)  # Converte a string binária para decimal usando a base 2
             return decimal
         else:
@@ -14,7 +14,7 @@ def converteParaDecimal(binario):
 while True:
     binario = input("Digite a sequência binária: ")
 
-    if binario.lower() == "break":
+    if binario.lower() == "break": # Ao escrever break durante o input, o programa é interrompido
         print("Programa interrompido.")
         break
 
