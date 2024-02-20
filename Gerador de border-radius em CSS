@@ -1,0 +1,28 @@
+def geradorBorderRadius(TopLeft, TopRight, BottomLeft, BottomRight):
+    # Verificar se todos os cantos têm o mesmo valor
+    if TopLeft == TopRight == BottomLeft == BottomRight:
+        # Se todos os cantos forem iguais, retornar um único valor de border-radius
+        borderRadius = f"{TopLeft}px;"
+        return borderRadius
+    # Se os cantos forem diferentes, retornar valores individuais para cada canto
+    borderRadius = f"{TopLeft}px;\n{TopRight}px;\n{BottomLeft}px;\n{BottomRight}px;"
+    return borderRadius
+
+try:
+    TopLeft = int(input("Insira o valor do canto superior esquerdo: "))
+    TopRight = int(input("Insira o valor do canto superior direito: "))
+    BottomLeft = int(input("Insira o valor do canto inferior esquerdo: "))
+    BottomRight = int(input("Insira o valor do canto inferior direito: "))
+
+    print("\nSeu border-radius copiável em CSS:")
+
+    if TopLeft == TopRight == BottomLeft == BottomRight:
+        print(f"\nborder-radius: {TopLeft}px;\n")
+    else:
+        print(f"\nborder-top-left-radius: {TopLeft}px;"
+              f"\nborder-top-right-radius: {TopRight}px;"
+              f"\nborder-bottom-left-radius: {BottomLeft}px;"
+              f"\nborder-bottom-right-radius: {BottomRight}px;\n")
+except ValueError:
+    print("Entrada inválida. Certifique-se de inserir valores inteiros.")
+    exit()
