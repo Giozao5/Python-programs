@@ -1,0 +1,148 @@
+from tkinter import *
+
+# Cores
+preto = "#3b3b3b"
+branco = "#ffffff"
+azul = "#38576b"
+cinza = "#eceff1"
+laranja = "#ffab40"
+
+# Função para atualizar o frame do histórico de operações
+def atualizarHistorico():
+    historico_formatado = []
+
+    for item in historico[-10:]: # Exibe até 10 itens
+        # Se clicar em um operador, adiciona espaço antes e depois
+        if item in {'+', '-', '*', '/', '%'}:
+            historico_formatado.append(" " + item + " ")
+        else:
+            historico_formatado.append(item)
+
+    historicoTexto.set("".join(historico_formatado))
+
+# Função que recebe os valores e concatena-os
+def entraValores(event):
+    global ultima_operacao
+    expressao = valorTotal.get()  # Obter a expressão atual do visor
+
+    if event.isdigit() or event == ".":  # Se o evento for um dígito ou ponto decimal
+        if valorTotal.get() == "0" or ultima_operacao == "=":
+            valorTotal.set(event)
+        else:
+            valorTotal.set(valorTotal.get() + event)
+    else:  # Se o evento for um operador
+        if ultima_operacao == "=":
+            # Se a última operação foi "=", definir a expressão atual como o valor no visor
+            expressao = valorTotal.get()
+        else:
+            try:
+                # Calcular o resultado da expressão atual
+                resultado = eval(expressao)
+                valorTotal.set(str(resultado))  # Atualizar o visor com o resultado
+            except:
+                valorTotal.set("Erro")
+        valorTotal.set(valorTotal.get() + " " + event + " ")  # Adicionar o operador ao visor
+
+    ultima_operacao = event  # Atualizar a última operação
+
+    if event == "=":  # Se a última operação for "=", limpar o histórico
+        historico.clear()
+    else:
+        historico.append(event)
+        atualizarHistorico()
+
+# Função responsável por realizar as operações matemáticas
+def calculaResultado():
+    global ultima_operacao
+
+    try:
+        resultado = eval(valorTotal.get())
+        valorTotal.set(str(resultado))
+    except:
+        valorTotal.set("Erro")
+
+    ultima_operacao = "="
+
+# Função que limpa a string valorTotal
+def limparResultado():
+    global ultima_operacao
+    valorTotal.set("0")
+    ultima_operacao = ""
+    historico.clear()
+    atualizarHistorico()
+
+# Função que determina os parâmetros, cria e posiciona os botões no frame inferior
+def criarBotao(frame, texto, comando, x, y, width=5, height=2, bg=cinza, fg=preto):
+    if texto in {'%', '/', '*', '-', '+', '='}: # Para definição das cores dos botões das operações
+        bg = laranja
+        fg = branco
+
+    botao = Button(frame, command=comando, text=texto, width=width, height=height, bg=bg, fg=fg, font=("Ivy 13 bold"), overrelief=RIDGE, anchor="center", justify="center")
+    botao.place(x=x, y=y)
+
+# Função que cria labels
+def criarLabel(frame, textvariable, width, height, padx, anchor, justify, bg, font, fg):
+    label = Label(frame, textvariable=textvariable, width=width, height=height, padx=padx, anchor=anchor, justify=justify, bg=bg, font=font, fg=fg)
+    return label
+
+# Configurações da janela principal
+janela = Tk() # Cria uma instância da classe Tkinter para representar a janela principal
+janela.title("Calculadora")
+janela.minsize(235, 338)
+janela.maxsize(235, 338)
+janela.configure(bg=preto)
+
+# Configurações dos frames
+# Frame que exibe o resultado
+frameVisorResultado = Frame(janela, width=235, height=50, bg=azul)
+frameVisorResultado.grid(row=1, column=0)
+# Frame que armazena os botões
+frameGradeBotoes = Frame(janela, width=235, height=268, bg=cinza)
+frameGradeBotoes.grid(row=2, column=0)
+# Frame que exibe o histórico de operações
+frameHistorico = Frame(janela, width=235, height=20, bg=preto)
+frameHistorico.grid(row=0, column=0)
+
+# Variáveis
+# Inicia a variável responsável por mostrar o que aparecerá no visor e inicializa a calculadora com a string valorTotal igual a zero
+valorTotal = StringVar(value="0")
+# Variável para armazenar a última operação realizada
+ultima_operacao = ""
+# Lista para armazenar as operações
+historico = []
+historicoTexto = StringVar(value="")
+
+# Configurações dos labels
+# Label que representa o visor do resultado
+display = criarLabel(frameVisorResultado, valorTotal, 16, 2, 4, "e", "right", azul, ("Ivy 18"), branco)
+display.place(x=0, y=0)
+# Label que representa o histórico de operações
+labelHistorico = criarLabel(frameHistorico, historicoTexto, 16, 1, 4, "e", "right", preto, ("Ivy 18"), branco)
+labelHistorico.pack()
+
+# Configurações dos botões
+botoes = [
+    ("C", limparResultado, -32, 0, 18),
+    ("%", lambda: entraValores("%"), 118, 0),
+    ("/", lambda: entraValores("/"), 177, 0, 5),
+    ("7", lambda: entraValores("7"), 0, 52),
+    ("8", lambda: entraValores("8"), 59, 52),
+    ("9", lambda: entraValores("9"), 118, 52),
+    ("*", lambda: entraValores("*"), 177, 52, 5),
+    ("4", lambda: entraValores("4"), 0, 104),
+    ("5", lambda: entraValores("5"), 59, 104),
+    ("6", lambda: entraValores("6"), 118, 104),
+    ("-", lambda: entraValores("-"), 177, 104, 5),
+    ("1", lambda: entraValores("1"), 0, 156),
+    ("2", lambda: entraValores("2"), 59, 156),
+    ("3", lambda: entraValores("3"), 118, 156),
+    ("+", lambda: entraValores("+"), 177, 156, 5),
+    ("0", lambda: entraValores("0"), -32, 208, 18),
+    (".", lambda: entraValores("."), 118, 208),
+    ("=", calculaResultado, 177, 208, 5)
+]
+
+for texto, cmd, x, y, *params in botoes:
+    criarBotao(frameGradeBotoes, texto, cmd, x, y, *params)
+
+janela.mainloop() # Inicia o loop principal da interface gráfica
