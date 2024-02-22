@@ -12,8 +12,7 @@ def atualizarHistorico():
     historico_formatado = []
 
     for item in historico[-10:]: # Exibe até 10 itens
-        # Se clicar em um operador, adiciona espaço antes e depois
-        if item in {'+', '-', '*', '/', '%'}:
+        if item in {'+', '-', '*', '/', '%'}: # Se clicar em um operador, adiciona espaço antes e depois
             historico_formatado.append(" " + item + " ")
         else:
             historico_formatado.append(item)
@@ -31,13 +30,11 @@ def entraValores(event):
         else:
             valorTotal.set(valorTotal.get() + event)
     else:  # Se o evento for um operador
-        if ultima_operacao == "=":
-            # Se a última operação foi "=", definir a expressão atual como o valor no visor
+        if ultima_operacao == "=": # Se a última operação foi "=", definir a expressão atual como o valor no visor            
             expressao = valorTotal.get()
         else:
-            try:
-                # Calcular o resultado da expressão atual
-                resultado = eval(expressao)
+            try:                
+                resultado = eval(expressao) # Calcular o resultado da expressão atual
                 valorTotal.set(str(resultado))  # Atualizar o visor com o resultado
             except:
                 valorTotal.set("Erro")
@@ -52,8 +49,9 @@ def entraValores(event):
         atualizarHistorico()
 
 # Função responsável por realizar as operações matemáticas
-def calculaResultado():
+def calculaResultado(): # Ao clicar no igual "="
     global ultima_operacao
+    global historico
 
     try:
         resultado = eval(valorTotal.get())
@@ -61,12 +59,13 @@ def calculaResultado():
     except:
         valorTotal.set("Erro")
 
+    historico.append("|")
     ultima_operacao = "="
 
 # Função que limpa a string valorTotal
-def limparResultado():
+def limparResultado(): # Ao clicar no AC
     global ultima_operacao
-    valorTotal.set("0")
+    valorTotal.set("0") # Mostra o "0" no visor
     ultima_operacao = ""
     historico.clear()
     atualizarHistorico()
@@ -122,7 +121,7 @@ labelHistorico.pack()
 
 # Configurações dos botões
 botoes = [
-    ("C", limparResultado, -32, 0, 18),
+    ("AC", limparResultado, -32, 0, 18),
     ("%", lambda: entraValores("%"), 118, 0),
     ("/", lambda: entraValores("/"), 177, 0, 5),
     ("7", lambda: entraValores("7"), 0, 52),
